@@ -1,0 +1,129 @@
+bert_uncased_model
+
+export BERT_BASE_DIR=../bert_uncased_model
+export SQUAD_DIR=../data
+python run_squad.py \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/config.json \
+  --init_checkpoint=$BERT_BASE_DIR/model.ckpt \
+  --do_predict=True \
+  --predict_file=$SQUAD_DIR/test.json \
+  --train_batch_size=12 \
+  --learning_rate=3e-5 \
+  --num_train_epochs=2.0 \
+  --max_seq_length=384 \
+  --doc_stride=128 \
+  --output_dir=logs
+
+python $SQUAD_DIR/evaluate-v1.1.py $SQUAD_DIR/test.json ./logs/bert_uncased_model/predictions.json
+{"exact_match": 30.0, "f1": 43.21184767613339}
+
+————————————————————————————————————————————————————————
+Re-train bert_uncased_model
+
+export BERT_BASE_DIR=../bert_uncased_model
+export SQUAD_DIR=../data
+python run_squad.py \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/config.json \
+  --init_checkpoint=$BERT_BASE_DIR/model.ckpt\
+  --do_train=True \
+  --train_file=$SQUAD_DIR/train.json \
+  --do_predict=True \
+  --predict_file=$SQUAD_DIR/test.json \
+  --train_batch_size=12 \
+  --learning_rate=3e-5 \
+  --num_train_epochs=2.0 \
+  --max_seq_length=384 \
+  --doc_stride=128 \
+  --output_dir=logs/retrin_bert_uncased_model
+
+python $SQUAD_DIR/evaluate-v1.1.py $SQUAD_DIR/test.json ./logs/retrin_bert_uncased_model/predictions.json
+
+————————————————————————————————————————————————————————
+BERT bert-large-uncased-whole-word-masking-finetuned-squad
+
+export SQUAD_DIR=data
+python run_squad.py \
+  --model_type bert \
+  --model_name_or_path bert-large-uncased-whole-word-masking-finetuned-squad \
+  --do_eval \
+  --predict_file $SQUAD_DIR/test.json \
+  --per_gpu_train_batch_size 12 \
+  --learning_rate 3e-5 \
+  --num_train_epochs 2.0 \
+  --max_seq_length 384 \
+  --doc_stride 128 \
+  --output_dir /tmp/debug_squad/
+
+
+python $SQUAD_DIR/evaluate-v1.1.py $SQUAD_DIR/test.json $SQUAD_DIR/predictions.json
+{"exact_match": 11.428571428571429, "f1": 46.55703371852439}
+
+————————————————————————————————————————————————————————
+BERT-pubmed-1000000-SQuAD
+
+cd bert
+export BERT_BASE_DIR=../BERT-pubmed-1000000-SQuAD
+export SQUAD_DIR=../data
+
+python run_squad.py \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/config.json \
+  --init_checkpoint=$BERT_BASE_DIR/model.ckpt \
+  --do_predict=True \
+  --predict_file=$SQUAD_DIR/test.json \
+  --train_batch_size=12 \
+  --learning_rate=3e-5 \
+  --num_train_epochs=2.0 \
+  --max_seq_length=384 \
+  --doc_stride=128 \
+  --output_dir=../logs/biobert
+
+python $SQUAD_DIR/evaluate-v1.1.py $SQUAD_DIR/test.json ../logs/biobert/predictions.json
+{"exact_match": 54.285714285714285, "f1": 85.02338955243593}
+
+————————————————————————————————————————————————————————
+Re-train BERT-pubmed-1000000-SQuAD
+
+cd bert
+export BERT_BASE_DIR=../BERT-pubmed-1000000-SQuAD
+export SQUAD_DIR=../data
+python run_squad.py \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/config.json \
+  --init_checkpoint=$BERT_BASE_DIR/model.ckpt \
+  --do_train=True \
+  --train_file=$SQUAD_DIR/train.json \
+  --do_predict=True \
+  --predict_file=$SQUAD_DIR/test.json \
+  --train_batch_size=12 \
+  --learning_rate=3e-5 \
+  --num_train_epochs=2.0 \
+  --max_seq_length=384 \
+  --doc_stride=128 \
+  --output_dir=logs/retrain-biobert
+
+python $SQUAD_DIR/evaluate-v1.1.py $SQUAD_DIR/test.json ./logs/retrain-biobert/predictions.json
+{"exact_match": 70.0, "f1": 84.91713200029629}
+
+————————————————————————————————————————————————————————
+Re-train new_vocab.txt BERT-pubmed-1000000-SQuAD
+
+cd bert
+export BERT_BASE_DIR=../BERT-pubmed-1000000-SQuAD
+export SQUAD_DIR=../data
+python run_squad.py \
+  --vocab_file=$BERT_BASE_DIR/new_vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/config.json \
+  --init_checkpoint=$BERT_BASE_DIR/model.ckpt \
+  --do_predict=True \
+  --predict_file=$SQUAD_DIR/test.json \
+  --train_batch_size=12 \
+  --learning_rate=3e-5 \
+  --num_train_epochs=2.0 \
+  --max_seq_length=384 \
+  --doc_stride=128 \
+  --output_dir=../logs/retrain_biobert_new_vocab
+
+python $SQUAD_DIR/evaluate-v1.1.py $SQUAD_DIR/test.json ../logs/retrain_biobert_new_vocab/predictions.json

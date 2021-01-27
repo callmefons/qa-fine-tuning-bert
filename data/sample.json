@@ -1,0 +1,17 @@
+{
+  "data": [
+    {
+      "title": "Question answering",
+      "paragraphs": [
+        {
+          "context": "Question answering (QA) is a computer science discipline within the fields of information retrieval and natural language processing (NLP), which is concerned with building systems that automatically answer questions posed by humans in a natural language.",
+          "qas": []
+        },
+        {
+          "context": "A QA implementation, usually a computer program, may construct its answers by querying a structured database of knowledge or information, usually a knowledge base. More commonly, QA systems can pull answers from an unstructured collection of natural language documents.",
+          "qas": []
+        }
+      ]
+    }
+  ]
+}
